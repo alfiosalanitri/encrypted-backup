@@ -1,5 +1,5 @@
 # encrypted-backup
-create an encrypted tar archive from source to destination with files and folders exclusions 
+how to create an encrypted compressed archive from custom source path to custom path destination. Supports files and folders exclusions from txt file. 
 
 ## Installation
 `sudo chmod +x /path/to/encrypted-baskup.sh`
