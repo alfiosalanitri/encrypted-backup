@@ -12,11 +12,13 @@
 # AUTHOR: 
 # backup-website-database.sh is written by Alfio Salanitri www.alfiosalanitri.it and are licensed under the MIT License.
 
-# global arguments
+# user input args
 backup_source=$1
 backup_dest=$2
-backup_temp=/tmp/manual-backup/
 backup_excluded=$3
+# global args
+backup_temp=/tmp/manual-backup/
+filename_prefix=$(echo $backup_source | sed -e 's/\//-/g;s/ /-/g;s/^-\(.*\)-$/\1/')
 
 # check arguments
 if [ ! -d "$1" ]; then
@@ -41,7 +43,7 @@ sudo rsync -zarhL --relative --stats --delete --exclude-from="$backup_excluded" 
 
 # compress tmp dir to dest dir
 printf "Rsync completed. Compressing temp dir, please wait...\n"
-backup_filename="${backup_dest}manual-backup-$(date +%d%m%Y-%H%M).tar.xz"
+backup_filename="${backup_dest}${filename_prefix}-$(date +%d%m%Y-%H%M).tar.xz"
 sudo tar cJfP $backup_filename $backup_temp
 
 # remove temp dir
