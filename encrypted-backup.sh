@@ -1,13 +1,11 @@
 #!/bin/bash
 #
 # NAME
-# encrypted-baskup.sh - create an encrypted tar archive from source to destination with files and folders exclusions
+# encrypted-baskup.sh - how to create an encrypted compressed archive from custom source path to custom path destination.
+# Supports files and folders exclusions from txt file. 
 #
 # SYNOPSIS
 # sudo ./encrypted-baskup.sh /path/from/files/ /path/to/destination/ /path/to/excluded.txt
-#
-# DESCRIPTION
-# this script create an encrypted tar archive from source to destination with files and folders exclusions.
 #
 # AUTHOR: 
 # backup-website-database.sh is written by Alfio Salanitri www.alfiosalanitri.it and are licensed under the MIT License.
@@ -18,6 +16,7 @@ backup_dest=$2
 backup_excluded=$3
 # global args
 backup_temp=/tmp/manual-backup/
+# convert source path to string. Es.: /path/to/Source Dir to path-to-Source-Dir
 filename_prefix=$(echo $backup_source | sed -e 's/\//-/g;s/ /-/g;s/^-\(.*\)-$/\1/')
 
 # check arguments
