@@ -1,3 +1,4 @@
 /home/user/.tmp
-/home/user/sites/**/node_modules
+node_modules
 /home/user/important.zip
+all-files-with-my-name.txt
