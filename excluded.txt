@@ -1,0 +1,3 @@
+/home/user/.tmp
+/home/user/sites/**/node_modules
+/home/user/important.zip
