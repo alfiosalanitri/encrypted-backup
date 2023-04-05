@@ -1,4 +1,3 @@
 /home/user/.tmp
 node_modules
 /home/user/important.zip
-all-files-with-my-name.txt

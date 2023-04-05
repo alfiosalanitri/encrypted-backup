@@ -1,62 +1,61 @@
 #!/bin/bash
 #
-# NAME
-# encrypted-baskup.sh - create compressed archive from source path to destination.
-# Supports files and folders exclusions from txt file and encryption with password.
+# To create an encrypted tar archive of a given directory.
+# Supports files and folders exclusions listed in the excluded.txt file
 #
 # SYNOPSIS
-# - sudo ./encrypted-baskup.sh /path/from/files/ /path/to/destination/
-# - sudo ./encrypted-baskup.sh /path/from/files/ /path/to/destination/ /path/to/excluded.txt
+# - ./encrypted-baskup /path/from/files/ /path/to/destination/
+# or
+# - ./encrypted-baskup.sh /path/from/files/ /path/to/destination/ /path/to/excluded.txt
 #
 # AUTHOR: 
-# backup-website-database.sh is written by Alfio Salanitri www.alfiosalanitri.it and are licensed under the MIT License.
+# encrypted-backup is written by Alfio Salanitri www.alfiosalanitri.it and are licensed under the MIT License.
 
 #############################################################
 # Icons	and color
 # https://www.techpaste.com/2012/11/print-colored-text-background-shell-script-linux/
 # https://apps.timwhitlock.info/emoji/tables/unicode
 #############################################################
-red='\033[0;31m'
-green='\033[0;32m'
-yellow='\033[1;33m'
-nocolor='\033[0m'
-icon_ok='\xE2\x9C\x94'
-icon_ko='\xe2\x9c\x97'
-icon_wait='\xE2\x8C\x9B'
-icon_rocket='\xF0\x9F\x9A\x80'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NOCOLOR='\033[0m'
+ICON_OK='\xE2\x9C\x94'
+ICON_KO='\xe2\x9c\x97'
+ICON_WAIT='\xE2\x8C\x9B'
+ICON_ROCKET='\xF0\x9F\x9A\x80'
 
 # user input args
-backup_source=$1
-backup_dest=$2
+BACKUP_SOURCE=$(readlink -f $1)
+BACKUP_DESTINATION=$(readlink -f $2)
 # convert source path to string. Es.: /path/to/Source Dir to path-to-Source-Dir
-filename_prefix=$(echo $backup_source | sed -e 's/\//-/g;s/ /-/g;s/^-\(.*\)-$/\1/')
+FILENAME_PREFIX=$(echo $BACKUP_SOURCE | sed -e 's/\//-/g;s/ /-/g;s/^-\(.*\)-$/\1/')
 
 # check required arguments
-if [ ! -d "$1" ]; then
-  printf "[${red}${icon_ko}${nocolor}] Sorry, but ${green}Backup source directory${nocolor} doesn't exists.\n"
+if [ ! -d "$BACKUP_SOURCE" ]; then
+  printf "[${RED}${ICON_KO}${NOCOLOR}] Sorry, but ${GREEN}Backup source directory${NOCOLOR} doesn't exists.\n"
   exit 1
 fi
-if [ ! -d "$2" ]; then
-  printf "[${red}${icon_ko}${nocolor}] Sorry, but ${green}Backup destination directory${nocolor} doesn't exists.\n" 
+if [ ! -d "$BACKUP_DESTINATION" ]; then
+  printf "[${RED}${ICON_KO}${NOCOLOR}] Sorry, but ${GREEN}Backup destination directory${NOCOLOR} doesn't exists.\n" 
   exit 1
 fi
 
-sudo printf "\n[${yellow}${icon_wait}${nocolor}] Compressing source path, please wait...\n"
-backup_filename="${backup_dest}${filename_prefix}-$(date +%d%m%Y-%H%M).tar.xz"
-
+printf "\n[${YELLOW}${ICON_WAIT}${NOCOLOR}] Compressing source path, please wait...\n"
+BACKUP_FILENAME="${BACKUP_DESTINATION}/eb${FILENAME_PREFIX}-$(date +%d%m%Y-%H%M).tar"
 # check files or folder to exclude
 if [ -z "$3" ]; then
-  sudo tar cJfP $backup_filename $backup_source
+  tar cfP $BACKUP_FILENAME $BACKUP_SOURCE
 else
   # check if excluded file exists
   if [ ! -f "$3" ]; then
-    printf "[${red}${icon_ko}${nocolor}] Sorry, but ${green}Backup txt file${nocolor} with excluded files and directory doesn't exists.\n"
+    printf "[${RED}${ICON_KO}${NOCOLOR}] Sorry, but ${GREEN}Backup txt file${NOCOLOR} with excluded files and directory doesn't exists.\n"
     exit 1
   fi
-  sudo tar cJfP $backup_filename -X $3 $backup_source
+  tar cfP $BACKUP_FILENAME -X $(readlink -f $3) $BACKUP_SOURCE
 fi
-printf "[${green}${icon_ok}${nocolor}] Source path compressed.\n\n"
-printf "[${yellow}${icon_wait}${nocolor}] Do you want to encrypt the archive?\n"
+printf "[${GREEN}${ICON_OK}${NOCOLOR}] Source path compressed.\n\n"
+printf "[${YELLOW}${ICON_WAIT}${NOCOLOR}] Do you want to encrypt this archive with a password?\n"
 echo ""
 PS3="Type 1 or 2: "
 actions=("Yes" "No")
@@ -64,18 +63,18 @@ select action in "${actions[@]}"; do
   case $action in
   "Yes")
     # encrypt archive
-    gpg -c $backup_filename
+    gpg -c $BACKUP_FILENAME
 
     # remove tar
-    sudo rm $backup_filename
-    printf "[${green}${icon_rocket}${nocolor}] Archive encrypted with success.\n"
+    rm $BACKUP_FILENAME
+    printf "[${GREEN}${ICON_ROCKET}${NOCOLOR}] Archive encrypted with success.\n"
     break
     ;;
   "No")
-    printf "[${green}${icon_rocket}${nocolor}] Archive saved without encryption.\n"
+    printf "[${GREEN}${ICON_ROCKET}${NOCOLOR}] Archive saved without encryption.\n"
     break
     ;;
-  *) printf "[${red}${icon_ko}${nocolor}] $REPLY isn't a valid option. Try again\n" ;;
+  *) printf "[${RED}${ICON_KO}${NOCOLOR}] $REPLY isn't a valid option. Try again\n" ;;
   esac
 done
-exit 1
+exit 0
