@@ -4,9 +4,9 @@
 # Supports files and folders exclusions listed in the excluded.txt file
 #
 # SYNOPSIS
-# - ./encrypted-baskup /path/from/files/ /path/to/destination/
+# - ./encrypted-backup /path/from/files/ /path/to/destination/
 # or
-# - ./encrypted-baskup.sh /path/from/files/ /path/to/destination/ /path/to/excluded.txt
+# - ./encrypted-backup /path/from/files/ /path/to/destination/ /path/to/excluded.txt
 #
 # AUTHOR: 
 # encrypted-backup is written by Alfio Salanitri www.alfiosalanitri.it and are licensed under the MIT License.
