@@ -1,5 +1,5 @@
 # encrypted-backup
-Bash script to o create an encrypted tar archive of a given directory.
+Bash script to create an encrypted tar archive of a given directory.
 Supports files and folders exclusions listed in the excluded.txt file
 
 ## Installation
